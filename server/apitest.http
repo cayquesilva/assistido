@@ -5,3 +5,7 @@ Content-Type: application/json
     "name": "Cayque Silva",
     "email": "cayque.silva@teste.com"
 }
+
+
+###
+GET http://localhost:3333/invites/testeuser123

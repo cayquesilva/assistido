@@ -9,6 +9,7 @@ import {
 	validatorCompiler,
 } from "fastify-type-provider-zod";
 import { env } from "./env";
+import { accessInviteLinkRoute } from "./routes/access-invite-link-route";
 import { subscribeToEventRoute } from "./routes/subscribe-to-event-route";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -45,6 +46,7 @@ app.register(fastifySwaggerUi, {
 //nesse caso criamos uma pasta routes, com as rotas nela
 //para chamar uma rota usamos o register
 app.register(subscribeToEventRoute);
+app.register(accessInviteLinkRoute);
 
 //inicia o servidor, usando a variavel port no .env, passando por validação no arquivo env.ts
 app.listen({ port: env.PORT }).then(() => {
