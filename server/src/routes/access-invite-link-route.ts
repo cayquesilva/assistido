@@ -21,11 +21,9 @@ export const accessInviteLinkRoute: FastifyPluginAsyncZod = async (app) => {
 				params: z.object({
 					subscriberId: z.string(),
 				}),
-				//consigo usar a serialização para que o retorno seja ajustado conforme desejar, a depender do código de retorno.
+				//Não tem corpo retornado
 				response: {
-					201: z.object({
-						subscriberId: z.string(),
-					}),
+					302: z.null(),
 				},
 			},
 		},
