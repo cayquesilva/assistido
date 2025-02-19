@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import z from "zod";
+import { subscribeToEvent } from "../function/subscribe-to-event";
 //criando outra rota, dessa vez para criar inscrições usando POST
 
 export const subscribeToEventRoute: FastifyPluginAsyncZod = async (app) => {
@@ -25,8 +26,7 @@ export const subscribeToEventRoute: FastifyPluginAsyncZod = async (app) => {
 				//consigo usar a serialização para que o retorno seja ajustado conforme desejar, a depender do código de retorno.
 				response: {
 					201: z.object({
-						name: z.string(),
-						email: z.string(),
+						subscriberId: z.string(),
 					}),
 				},
 			},
@@ -35,12 +35,15 @@ export const subscribeToEventRoute: FastifyPluginAsyncZod = async (app) => {
 			//aqui eu posso criar uma inscrição, usando o body que foi passado, recuperando os dados passados no body
 			const { name, email } = request.body;
 
-			//quando configurado, podemos aqui, criar a inserçao da inscrição no banco de dados...
+			//criar a inserçao da inscrição no banco de dados...
+			const { subscriberId } = await subscribeToEvent({
+				name,
+				email,
+			});
 
 			//reply serve pra devolver uma resposta personalizada depois de executar a ação de envio
 			return reply.status(201).send({
-				name,
-				email,
+				subscriberId,
 			});
 		},
 	);
