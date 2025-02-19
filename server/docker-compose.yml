@@ -1,0 +1,26 @@
+#criação dos serviços necessários ao uso do nosso sistema
+#com o docker compose, podemos subir vários serviços de forma prática
+#docker compose usamos para ambiente de desenvolvimento, não de produção
+services:
+#primeiro serviço será o postgresql, como banco de dados relacional para usuarios
+  postgres:
+  #imagem do serviço
+    image: bitnami/postgresql
+    #porta a ser usada, caso haja outra instalação, tomar cuidado com a porta
+    ports:
+      - "5432:5432"
+    #variaveis de ambiente
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=assistido
+
+#segundo serviço: redis = banco de dados local para ranking e coisas menores
+  redis:
+    image: bitnami/redis
+    ports:
+      - "6379:6379"
+    #permitindo pass vazia pq só usamos em desenvolvimento
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
