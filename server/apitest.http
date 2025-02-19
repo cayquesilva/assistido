@@ -2,15 +2,25 @@ POST http://localhost:3333/subscriptions
 Content-Type: application/json
 
 {
-    "name": "Cayque Silva",
-    "email": "cayque.silva@teste.com"
+    "name": "Cayque teste",
+    "email": "cayque.teste@teste.com",
+    "referrer": "3ecad413-b592-40ba-843d-3673c5dc7832"
 }
 
 
 ###
-GET http://localhost:3333/invites/testeuser123
+GET http://localhost:3333/invites/3ecad413-b592-40ba-843d-3673c5dc7832
 
 
 
 ###
-GET http://localhost:3333/subscribers/testeuser123/ranking/clicks
+GET http://localhost:3333/subscribers/3ecad413-b592-40ba-843d-3673c5dc7832/ranking/clicks
+
+###
+GET http://localhost:3333/subscribers/3ecad413-b592-40ba-843d-3673c5dc7832/ranking/count
+
+###
+GET http://localhost:3333/subscribers/3ecad413-b592-40ba-843d-3673c5dc7832/ranking/position
+
+###
+GET http://localhost:3333/ranking

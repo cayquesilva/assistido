@@ -22,6 +22,7 @@ export const subscribeToEventRoute: FastifyPluginAsyncZod = async (app) => {
 				body: z.object({
 					name: z.string(),
 					email: z.string().email(),
+					referrer: z.string().nullish(),
 				}),
 				//consigo usar a serialização para que o retorno seja ajustado conforme desejar, a depender do código de retorno.
 				response: {
@@ -33,12 +34,13 @@ export const subscribeToEventRoute: FastifyPluginAsyncZod = async (app) => {
 		},
 		async (request, reply) => {
 			//aqui eu posso criar uma inscrição, usando o body que foi passado, recuperando os dados passados no body
-			const { name, email } = request.body;
+			const { name, email, referrer } = request.body;
 
 			//criar a inserçao da inscrição no banco de dados...
 			const { subscriberId } = await subscribeToEvent({
 				name,
 				email,
+				referrerId: referrer,
 			});
 
 			//reply serve pra devolver uma resposta personalizada depois de executar a ação de envio
