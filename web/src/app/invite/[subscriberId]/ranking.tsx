@@ -1,9 +1,12 @@
+import { getRanking } from "@/http/api";
 import Image from "next/image";
 import cooper from "../../../assets/medal-cooper.svg";
 import gold from "../../../assets/medal-gold.svg";
 import silver from "../../../assets/medal-silver.svg";
 
-export default function Ranking() {
+export default async function Ranking() {
+	//buscando o ranking. função gerada no arquivo api do orval
+	const { ranking } = await getRanking();
 	return (
 		<div className="w-full max-w-[440px] space-y-5">
 			<h2 className="text-gray-200 text-xl font-heading font-semibold leading-none">
@@ -11,50 +14,30 @@ export default function Ranking() {
 			</h2>
 
 			<div className="space-y-4">
-				<div className="rounded-xl bg-gray-700 border border-gray-600 flex flex-col justify-center gap-3 p-6 relative">
-					<span className="text-sm text-gray-300 leading-none">
-						<span className="font-semibold">1º</span> | Cayque Silva
-					</span>
-					<span className="text-2xl font-heading font-semibold text-gray-200 leading-none">
-						1040
-					</span>
+				{ranking.map((item, index) => {
+					const rankingPosition = index + 1;
+					const medals = [gold, silver, cooper];
+					return (
+						<div
+							key={item.id}
+							className="rounded-xl bg-gray-700 border border-gray-600 flex flex-col justify-center gap-3 p-6 relative"
+						>
+							<span className="text-sm text-gray-300 leading-none">
+								<span className="font-semibold">{rankingPosition}º</span> |{" "}
+								{item.name}
+							</span>
+							<span className="text-2xl font-heading font-semibold text-gray-200 leading-none">
+								{item.score}
+							</span>
 
-					<Image
-						src={gold}
-						alt="Gold Medal"
-						className="absolute top-0 right-8"
-					/>
-				</div>
-
-				<div className="rounded-xl bg-gray-700 border border-gray-600 flex flex-col justify-center gap-3 p-6 relative">
-					<span className="text-sm text-gray-300 leading-none">
-						<span className="font-semibold">2º</span> | Manoel Gomes
-					</span>
-					<span className="text-2xl font-heading font-semibold text-gray-200 leading-none">
-						724
-					</span>
-
-					<Image
-						src={silver}
-						alt="Silver Medal"
-						className="absolute top-0 right-8"
-					/>
-				</div>
-
-				<div className="rounded-xl bg-gray-700 border border-gray-600 flex flex-col justify-center gap-3 p-6 relative">
-					<span className="text-sm text-gray-300 leading-none">
-						<span className="font-semibold">3º</span> | Neil Armstrong
-					</span>
-					<span className="text-2xl font-heading font-semibold text-gray-200 leading-none">
-						337
-					</span>
-
-					<Image
-						src={cooper}
-						alt="Cooper Medal"
-						className="absolute top-0 right-8"
-					/>
-				</div>
+							<Image
+								src={medals[index]}
+								alt={`${medals[index]} medal`}
+								className="absolute top-0 right-8"
+							/>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

@@ -1,8 +1,10 @@
 "use client";
 import { Button } from "@/components/button";
 import { InputField, InputIcon, InputRoot } from "@/components/input";
+import { postSubscriptions } from "@/http/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Mail, User } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,6 +16,11 @@ const subscriptionSchema = z.object({
 type SubscriptionSchema = z.infer<typeof subscriptionSchema>;
 
 export default function SubscriptionForm() {
+	//navegação
+	const router = useRouter();
+	//recupera os parametros passados ao clicar no link de invite... pagina inicial com paremetro referer
+	const searchParams = useSearchParams();
+
 	//biblioteca do react hook form para melhorar uso de forms com uso de zod para validação
 	const {
 		register,
@@ -23,8 +30,19 @@ export default function SubscriptionForm() {
 		resolver: zodResolver(subscriptionSchema),
 	});
 
-	function onSubscribe(data: SubscriptionSchema) {
-		console.log(data);
+	async function onSubscribe({ name, email }: SubscriptionSchema) {
+		//recebendo o parametro passado ao clicar em cadastrar [parametro recebido quando usado o link de invite...]
+		const referrer = searchParams.get("referrer");
+
+		//usando orval para criar funções fetch de forma automatizada
+		const { subscriberId } = await postSubscriptions({
+			name,
+			email,
+			referrer,
+		});
+
+		//redireciona para a página invite usando o subscriber id recebido pelo post
+		router.push(`/invite/${subscriberId}`);
 	}
 
 	return (
@@ -65,7 +83,6 @@ export default function SubscriptionForm() {
 							type="email"
 							placeholder="E-mail..."
 							{...register("email")}
-							
 						/>
 					</InputRoot>
 
